@@ -52,6 +52,6 @@ describe('Blog page', () => {
     render(page)
     expect(await screen.findByText('blog page')).toBeInTheDocument()
     expect(screen.getByText('dummy title 1')).toBeInTheDocument()
-    expect(screen.getByText('dummy body 2')).toBeInTheDocument()
+    expect(screen.getByText('dummy title 2')).toBeInTheDocument()
   })
 })
