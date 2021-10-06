@@ -2,15 +2,16 @@ import '@testing-library/jest-dom/extend-expect'
 import { cleanup, render, screen } from '@testing-library/react'
 import { getPage } from 'next-page-tester'
 import { initTestHelpers } from 'next-page-tester/dist/testHelpers'
-import { rsst } from 'msw'
+import { rest } from 'msw'
 import { setupServer } from 'msw/node'
 
 initTestHelpers()
 
 const handlers = [
-  rest.get(
-    'https://jsonplaceholder.typicode.com/posts/?_limit=10',
-    (req, res, ctx) => {
+  rest.get('https://jsonplaceholder.typicode.com/posts/', (req, res, ctx) => {
+    const query = req.url.searchParams
+    const _limit = query.get('_limit')
+    if (_limit === '10') {
       return res(
         ctx.status(200),
         ctx.json([
@@ -29,7 +30,7 @@ const handlers = [
         ])
       )
     }
-  ),
+  }),
 ]
 const server = setupServer(...handlers)
 beforeAll(() => {
@@ -41,4 +42,16 @@ afterEach(() => {
 })
 afterAll(() => {
   server.close()
+})
+
+describe('Blog page', () => {
+  it('Should render the list of blogs pre-fetched by getStaticProps', async () => {
+    const { page } = await getPage({
+      route: '/blog-page',
+    })
+    render(page)
+    expect(await screen.findByText('blog page')).toBeInTheDocument()
+    expect(screen.getByText('dummy title 1')).toBeInTheDocument()
+    expect(screen.getByText('dummy title 2')).toBeInTheDocument()
+  })
 })
