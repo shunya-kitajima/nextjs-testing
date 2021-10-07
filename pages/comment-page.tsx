@@ -1,4 +1,8 @@
 import Layout from '../components/Layout'
+import useSWR from 'swr'
+import axios from 'axios'
+
+import Comment from '../components/Comment'
 
 const CommentPage: React.FC = () => {
   return (
