@@ -3,7 +3,6 @@
  */
 import '@testing-library/jest-dom/extend-expect'
 import { cleanup, render, screen } from '@testing-library/react'
-import { cache } from 'swr/dist/utils/config'
 import { SWRConfig } from 'swr'
 import { rest } from 'msw'
 import { setupServer } from 'msw/node'
@@ -45,7 +44,6 @@ beforeAll(() => server.listen())
 afterEach(() => {
   server.resetHandlers()
   cleanup()
-  cache.delete('commentsFetch')
 })
 afterAll(() => server.close())
 
