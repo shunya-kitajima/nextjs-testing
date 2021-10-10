@@ -3,7 +3,7 @@
  */
 import '@testing-library/jest-dom/extend-expect'
 import { cleanup, render, screen } from '@testing-library/react'
-import { SWRConfig } from 'swr'
+import { SWRConfig, cache } from 'swr'
 import { rest } from 'msw'
 import { setupServer } from 'msw/node'
 
@@ -55,6 +55,6 @@ describe('Comment page with useSWR / Success+Error', () => {
       </SWRConfig>
     )
     expect(await screen.findByText('1: test body a')).toBeInTheDocument()
-    expect(await screen.findByText('2: test body b')).toBeInTheDocument()
+    expect(screen.findByText('2: test body b')).toBeInTheDocument()
   })
 })
