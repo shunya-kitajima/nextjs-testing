@@ -19,5 +19,4 @@ const ContextA: React.FC = () => {
     </>
   )
 }
-
 export default ContextA

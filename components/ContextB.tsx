@@ -11,5 +11,4 @@ const ContextB: React.FC = () => {
     </>
   )
 }
-
 export default ContextB
