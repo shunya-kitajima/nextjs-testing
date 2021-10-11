@@ -3,7 +3,7 @@
  */
 import '@testing-library/jest-dom/extend-expect'
 import { cleanup, render, screen } from '@testing-library/react'
-import { SWRConfig, cache } from 'swr'
+import { SWRConfig } from 'swr'
 import { rest } from 'msw'
 import { setupServer } from 'msw/node'
 
@@ -55,6 +55,26 @@ describe('Comment page with useSWR / Success+Error', () => {
       </SWRConfig>
     )
     expect(await screen.findByText('1: test body a')).toBeInTheDocument()
-    expect(screen.findByText('2: test body b')).toBeInTheDocument()
+    expect(screen.getByText('2: test body b')).toBeInTheDocument()
+  })
+  it('Should render Error text when fetch failed', async () => {
+    server.use(
+      rest.get(
+        'https://jsonplaceholder.typicode.com/comments/',
+        (req, res, ctx) => {
+          const query = req.url.searchParams
+          const _limit = query.get('_limit')
+          if (_limit === '10') {
+            return res(ctx.status(400))
+          }
+        }
+      )
+    )
+    render(
+      <SWRConfig value={{ dedupingInterval: 0 }}>
+        <CommentPage />
+      </SWRConfig>
+    )
+    expect(await screen.findByText('Error!')).toBeInTheDocument()
   })
 })
