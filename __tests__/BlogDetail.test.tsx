@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import '@testing-library/jest-dom/extend-expect'
 import { cleanup, render, screen } from '@testing-library/react'
 import { getPage } from 'next-page-tester'
